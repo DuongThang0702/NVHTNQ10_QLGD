@@ -1,0 +1,27 @@
+# Ignore Visual Studio project files and settings
+.vs/
+
+# Ignore compiled output
+bin/
+
+# Ignore intermediate build files
+obj/
+
+# Ignore NuGet packages
+packages/
+
+# Ignore project properties files
+Properties/
+
+# Ignore static files
+wwwroot/
+
+# Ignore log files
+*.log
+
+# Ignore test databases
+*.mdf
+*.ldf
+
+# Ignore deployment scripts
+deploy.sh
