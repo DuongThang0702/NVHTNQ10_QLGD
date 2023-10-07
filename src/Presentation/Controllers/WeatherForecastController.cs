@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace QLGD.Controllers
+namespace Presentation.Controllers
 {
     [ApiController]
     [Route("[controller]")]
