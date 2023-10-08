@@ -6,35 +6,57 @@ namespace Business.Services.Role
 {
     public class RoleService : IRoleService
     {
-        private readonly IRole _roleRepo;
-        public RoleService(IRole roleRepo)
+        private readonly IRoleRepo _roleRepo;
+
+        public RoleService(IRoleRepo roleRepo)
         {
             _roleRepo = roleRepo;
         }
-        public Task<IdentityResult> CreateRole(CreateRoleDto roleName)
+
+        public async Task<List<IdentityRole>> GetAllRoles()
         {
-            var response = _roleRepo.Create(roleName.RoleName);
-            return response;
+            var result = await _roleRepo.GetAll();
+            return result;
         }
 
-        public Task<IdentityResult> DeleteRole()
+        public async Task<ResponseCreateRole> CreateRole(CreateRoleDto data)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(data.RoleName) || data == null)
+                return new ResponseCreateRole { Mes = "Missing input", Status = false };
+
+            var response = await _roleRepo.Create(data.RoleName);
+
+            if (!response.Succeeded)
+                return new ResponseCreateRole { Mes = "The role already exists", Status = false };
+
+            return new ResponseCreateRole { Mes = "Role created successfully", Status = true };
+            ;
         }
 
-        public Task<IdentityResult> GetAllRoles()
+        public async Task<ResponseDeleteRole> DeleteRole(string roleId)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(roleId))
+                return new ResponseDeleteRole { Mes = "Missing input", Status = false };
+            var result = await _roleRepo.Delete(roleId);
+            if (!result.Succeeded)
+                return new ResponseDeleteRole { Mes = "Something went wrong", Status = false };
+            else
+                return new ResponseDeleteRole { Mes = "Role deleted successfully", Status = true };
         }
 
-        public Task<IdentityResult> GetById()
+        public async Task<ResponseUpdateRole> UpdateRole(UpateRoleDto data, string roleID)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<IdentityResult> UpdateRole()
-        {
-            throw new NotImplementedException();
+            if (
+                data == null
+                || string.IsNullOrEmpty(roleID)
+                || string.IsNullOrEmpty(data.RoleName)
+            )
+                return new ResponseUpdateRole { Mes = "Missing input", Status = false };
+            var result = await _roleRepo.Update(roleID, data.RoleName);
+            if (!result.Succeeded)
+                return new ResponseUpdateRole { Mes = "Something went wrong", Status = false };
+            else
+                return new ResponseUpdateRole { Mes = "Role updated successfully", Status = true };
         }
     }
 }

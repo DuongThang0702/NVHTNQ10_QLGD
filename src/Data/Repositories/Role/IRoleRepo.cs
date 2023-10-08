@@ -7,13 +7,11 @@ using System.Threading.Tasks;
 
 namespace Data.Repositories.Role
 {
-    public interface IRole
+    public interface IRoleRepo
     {
+        Task<List<IdentityRole>> GetAll();
         Task<IdentityResult> Create(string role);
-        Task<IdentityResult> GetAll();
-        Task<IdentityResult> GetOneBy();
-        Task<IdentityResult> Delete();
-        Task<IdentityResult> Patch();
-
+        Task<IdentityResult> Delete(string roleId);
+        Task<IdentityResult> Update(string roleId, string roleName);
     }
 }

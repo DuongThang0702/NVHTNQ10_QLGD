@@ -1,6 +1,7 @@
 ﻿using Business.Dtos;
 using Business.Services.Role;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Presentation.Controllers
@@ -10,16 +11,47 @@ namespace Presentation.Controllers
     public class RoleController : ControllerBase
     {
         private readonly IRoleService _roleService;
+
         public RoleController(IRoleService roleService)
         {
             _roleService = roleService;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllRoles()
+        {
+            return Ok(await _roleService.GetAllRoles());
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateRole([FromBody] CreateRoleDto payload)
         {
             var response = await _roleService.CreateRole(payload);
-            return Ok(response);
+            if (response.Status == false)
+                return BadRequest(response);
+            else
+                return Ok(response);
+        }
+
+        [HttpPatch]
+        public async Task<IActionResult> UpdateRole(
+            [FromBody] UpateRoleDto data,
+            [FromQuery] string roleId
+        )
+        {
+            var response = await _roleService.UpdateRole(data, roleId);
+            if (response.Status == false)
+                return BadRequest(response);
+            else
+                return Ok(response);
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteRole([FromQuery] string roleId)
+        {
+            var response = await _roleService.DeleteRole(roleId);
+            if (response.Status == false) return BadRequest(response);
+            else return Ok(response);
         }
     }
 }

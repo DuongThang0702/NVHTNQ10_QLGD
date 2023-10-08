@@ -10,10 +10,9 @@ namespace Business.Services.Role
 {
     public interface IRoleService
     {
-        Task<IdentityResult> CreateRole(CreateRoleDto roleName);
-        Task<IdentityResult> GetAllRoles();
-        Task<IdentityResult> GetById();
-        Task<IdentityResult> DeleteRole();
-        Task<IdentityResult> UpdateRole();
+        Task<List<IdentityRole>> GetAllRoles();
+        Task<ResponseCreateRole> CreateRole(CreateRoleDto data);
+        Task<ResponseDeleteRole> DeleteRole(string roleID);
+        Task<ResponseUpdateRole> UpdateRole(UpateRoleDto data, string roleID);
     }
 }

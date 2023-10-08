@@ -5,10 +5,7 @@ namespace Data.Entities
 {
     public class QLGDContext : IdentityDbContext<ApplicationUser>
     {
-        public QLGDContext(DbContextOptions<QLGDContext> options) : base(options)
-        {
-
-        }
-
+        public QLGDContext(DbContextOptions<QLGDContext> options)
+            : base(options) { }
     }
 }

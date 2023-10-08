@@ -7,7 +7,7 @@ namespace Data
     {
         public static IServiceCollection ConfigurationRepo(this IServiceCollection services)
         {
-            return services.AddScoped<IRole, Role>();
+            return services.AddScoped<IRoleRepo, RoleRepo>();
         }
     }
 }

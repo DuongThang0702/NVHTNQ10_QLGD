@@ -12,7 +12,10 @@ namespace Business
 {
     public static class ServiceCollection
     {
-        public static IServiceCollection ConfigurationService(this IServiceCollection services, Action<DbContextOptionsBuilder> contextOptionsBuilder)
+        public static IServiceCollection ConfigurationService(
+            this IServiceCollection services,
+            Action<DbContextOptionsBuilder> contextOptionsBuilder
+        )
         {
             return services
                 .ConfigurationRepo()
@@ -26,6 +29,8 @@ namespace Business
             public MappingProfile()
             {
                 CreateMap<CreateRoleDto, IdentityRole>();
+                CreateMap<UpateRoleDto, IdentityRole>();
+                CreateMap<DeleteRoleDto, IdentityRole>();
             }
         }
     }
