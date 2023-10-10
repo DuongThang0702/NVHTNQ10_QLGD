@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Business.Dtos;
+using Business.Services.Auth;
 using Business.Services.Role;
+using Business.Services.User;
 using Data;
 using Data.Entities;
 using Microsoft.AspNetCore.Identity;
@@ -19,9 +21,9 @@ namespace Business
         {
             return services
                 .ConfigurationRepo()
+                .ConfigurationScoped()
                 .AddAutoMapper(Assembly.GetExecutingAssembly())
-                .AddDbContextFactory<QLGDContext>(contextOptionsBuilder)
-                .AddScoped<IRoleService, RoleService>();
+                .AddDbContextFactory<QLGDContext>(contextOptionsBuilder);
         }
 
         public class MappingProfile : Profile
@@ -31,7 +33,21 @@ namespace Business
                 CreateMap<CreateRoleDto, IdentityRole>();
                 CreateMap<UpateRoleDto, IdentityRole>();
                 CreateMap<DeleteRoleDto, IdentityRole>();
+                CreateMap<ResetPasswordDto, ApplicationUser>();
+                CreateMap<SignInDto, ApplicationUser>();
+                CreateMap<SignUpDto, ApplicationUser>();
             }
+        }
+    }
+   
+    public static class ConfigScope
+    {
+        public static IServiceCollection ConfigurationScoped(this IServiceCollection services)
+        {
+            return services
+                .AddScoped<IRoleService, RoleService>()
+                .AddScoped<IUserService, UserService>()
+                .AddScoped<IAuthService, AuthService>();
         }
     }
 }

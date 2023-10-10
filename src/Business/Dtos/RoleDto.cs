@@ -17,13 +17,8 @@ namespace Business.Dtos
         public string? RoleID { get; set; }
     }
 
-    public class ResponseCreateRole
-    {
-        public string? Mes { get; set; }
-        public bool Status { get; set; }
-    }
-
-    public class ResponseDeleteRole : ResponseCreateRole { }
-    public class ResponseUpdateRole : ResponseCreateRole { }
+    public class ResponseCreateRole : BaseResponseDto{ }
+    public class ResponseDeleteRole : BaseResponseDto { }
+    public class ResponseUpdateRole : BaseResponseDto { }
 
 }

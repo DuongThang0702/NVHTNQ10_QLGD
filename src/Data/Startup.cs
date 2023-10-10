@@ -1,4 +1,5 @@
 ﻿using Data.Repositories.Role;
+using Data.Repositories.User;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Data
@@ -7,7 +8,9 @@ namespace Data
     {
         public static IServiceCollection ConfigurationRepo(this IServiceCollection services)
         {
-            return services.AddScoped<IRoleRepo, RoleRepo>();
+            return services
+                .AddScoped<IRoleRepo, RoleRepo>()
+                .AddScoped<IUserRepo, UserRepo>();
         }
     }
 }

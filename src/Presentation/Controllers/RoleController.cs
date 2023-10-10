@@ -46,8 +46,8 @@ namespace Presentation.Controllers
                 return Ok(response);
         }
 
-        [HttpDelete]
-        public async Task<IActionResult> DeleteRole([FromQuery] string roleId)
+        [HttpDelete("{roleId}")]
+        public async Task<IActionResult> DeleteRole([FromRoute] string roleId)
         {
             var response = await _roleService.DeleteRole(roleId);
             if (response.Status == false) return BadRequest(response);

@@ -39,7 +39,7 @@ namespace Business.Services.Role
                 return new ResponseDeleteRole { Mes = "Missing input", Status = false };
             var result = await _roleRepo.Delete(roleId);
             if (!result.Succeeded)
-                return new ResponseDeleteRole { Mes = "Something went wrong", Status = false };
+                return new ResponseDeleteRole { Mes = "RoleId not found", Status = false };
             else
                 return new ResponseDeleteRole { Mes = "Role deleted successfully", Status = true };
         }
@@ -54,7 +54,7 @@ namespace Business.Services.Role
                 return new ResponseUpdateRole { Mes = "Missing input", Status = false };
             var result = await _roleRepo.Update(roleID, data.RoleName);
             if (!result.Succeeded)
-                return new ResponseUpdateRole { Mes = "Something went wrong", Status = false };
+                return new ResponseUpdateRole { Mes = "RoleId not found", Status = false };
             else
                 return new ResponseUpdateRole { Mes = "Role updated successfully", Status = true };
         }
