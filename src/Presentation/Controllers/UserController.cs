@@ -23,12 +23,20 @@ namespace Presentation.Controllers
             else return Ok(response);
         }
 
-        [HttpPost("{userId}")]
+        [HttpPatch("{userId}")]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto payload, [FromRoute] string userId)
         {
             var response = await _userService.ResetPassword(payload, userId);
-            if (response.Status == false) return BadRequest(response);
+            if (!response.Succeeded) return BadRequest(response);
             else return Ok(response);
+        }
+
+        [HttpDelete("{userId}")]
+        public async Task<IActionResult> DeleteUser([FromRoute] string userId)
+        {
+            var response = await _userService.DeleteUser(userId);
+            if (!response.Succeeded) return BadRequest(response);
+            else return Ok(response);    
         }
     }
 }

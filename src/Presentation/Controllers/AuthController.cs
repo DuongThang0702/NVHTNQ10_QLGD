@@ -1,5 +1,6 @@
 ﻿using Business.Dtos;
 using Business.Services.Auth;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,19 +18,17 @@ namespace Presentation.Controllers
         [HttpPost]
         public async Task<IActionResult> SignUp([FromBody] SignUpDto data)
         {
-            return Ok(await _authService.SignUp(data));
+            var response = await _authService.SignUp(data);
+            if (!response.Succeeded) return BadRequest(response);
+            else return Ok(response);
         }
 
         [HttpPost]
-        public async Task<IActionResult> SignIn()
+        public async Task<IActionResult> SignIn([FromBody] SignInDto data)
         {
-            return Ok("Ok");
-        }
-
-        [HttpDelete]
-        public async Task<IActionResult> Logout()
-        {
-            return Ok();
+            var response = await _authService.SignIn(data);
+            if (response.Status == false) return BadRequest(response);
+            else return Ok(response);
         }
     }
 }
