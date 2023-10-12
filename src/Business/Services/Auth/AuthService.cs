@@ -1,4 +1,6 @@
 ﻿using Business.Dtos;
+using Data.Entities;
+using Data.Repositories.Auth;
 using Data.Repositories.User;
 using Microsoft.AspNetCore.Identity;
 using System;
@@ -11,24 +13,69 @@ namespace Business.Services.Auth
 {
     public class AuthService : IAuthService
     {
-        private readonly IUserRepo _userRepo;
-        public AuthService(IUserRepo userRepo)
+        private readonly IAuthRepo _authRepo;
+
+        public AuthService(IAuthRepo authRepo)
         {
-            _userRepo = userRepo;
+            _authRepo = authRepo;
         }
 
-        public Task<IdentityResult> SignIn(SignInDto data)
+        public async Task<SignInResponseDto> SignIn(SignInDto data)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(data.Email) || string.IsNullOrEmpty(data.Password))
+                return new SignInResponseDto
+                {
+                    Mes = "Missing input",
+                    Status = false,
+                    Access_token = null
+                };
+            var response = await _authRepo.SignIn(data.Email, data.Password);
+            if (string.IsNullOrEmpty(response))
+                return new SignInResponseDto
+                {
+                    Mes = "Wrong Email or Password",
+                    Status = false,
+                    Access_token = null
+                };
+            return new SignInResponseDto
+            {
+                Access_token = response,
+                Mes = "Logged in successfully",
+                Status = true,
+            };
         }
 
         public async Task<IdentityResult> SignUp(SignUpDto data)
         {
-            if (string.IsNullOrEmpty(data.FullName) 
-                || string.IsNullOrEmpty(data.Email) 
-                || string.IsNullOrEmpty(data.Password)) 
-                return IdentityResult.Failed(new IdentityError { Code = "InvalidData", Description = "Invalid data" }); 
-            var response = await _userRepo.CreateUser(data.Email, data.FullName, data.Password);
+            if (
+                string.IsNullOrEmpty(data.FullName)
+                || string.IsNullOrEmpty(data.Email)
+                || string.IsNullOrEmpty(data.Password)
+            )
+                return IdentityResult.Failed(
+                    new IdentityError { Code = "InvalidData", Description = "Invalid data" }
+                );
+            var response = await _authRepo.SignUp(data.Email, data.FullName, data.Password);
+            return response;
+        }
+
+        public async Task<IdentityResult> ResetPassword(ResetPasswordDto data)
+        {
+            if (
+                string.IsNullOrEmpty(data.NewPassword)
+                || string.IsNullOrEmpty(data.CurrentPassword)
+                || string.IsNullOrEmpty(data.Email)
+            )
+            {
+                IdentityError error = new() { Code = "400", Description = "Missing input" };
+                return IdentityResult.Failed(error);
+            }
+            ;
+            var response = await _authRepo.RestPassword(
+                data.Email,
+                data.CurrentPassword,
+                data.NewPassword
+            );
             return response;
         }
     }

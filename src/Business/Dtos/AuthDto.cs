@@ -12,8 +12,15 @@ namespace Business.Dtos
         [Required, EmailAddress]
         public string? Email { get; set; }
 
-        [Required, MinLength(6)]
-        public string? Password { get; set; }
+        [
+            Required,
+            MinLength(6),
+            RegularExpression(
+                @"^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@$!%*#?&]).{6,}$",
+                ErrorMessage = "Password must have at least 1 lowercase letter, 1 uppercase letter, 1 number and 1 special character."
+            )
+        ]
+        public string Password { get; set; } = string.Empty;
 
         [Required]
         public string? FullName { get; set; }
@@ -28,6 +35,22 @@ namespace Business.Dtos
         public string? Password { get; set; }
     }
 
-    public class SignInResponseDto : BaseResponseDto { }
+    public class ResetPasswordDto
+    {
+        [Required]
+        public string? Email { get; set; }
 
+        [Required]
+        [MinLength(6)]
+        public string? CurrentPassword { get; set; }
+
+        [Required]
+        [MinLength(6)]
+        public string? NewPassword { get; set; }
+    }
+
+    public class SignInResponseDto : BaseResponseDto
+    {
+        public string? Access_token { get; set; }
+    }
 }

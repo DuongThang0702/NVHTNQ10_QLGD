@@ -17,8 +17,9 @@ namespace Business.Dtos
         public string? RoleID { get; set; }
     }
 
-    public class ResponseCreateRole : BaseResponseDto{ }
-    public class ResponseDeleteRole : BaseResponseDto { }
-    public class ResponseUpdateRole : BaseResponseDto { }
+    public class ResponseCreateRole : BaseResponseDto { }
 
+    public class ResponseDeleteRole : ResponseCreateRole { }
+
+    public class ResponseUpdateRole : BaseResponseDto { }
 }

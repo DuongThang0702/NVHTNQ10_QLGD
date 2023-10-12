@@ -15,12 +15,7 @@ namespace Business.Dtos
         public List<ApplicationUser>? Users { get; set; }
     }
 
-    public class ResetPasswordDto
-    {
-        [Required]
-        [MinLength(6)]
-        public string? NewPassword { get; set; }
-    }
+
 
     public class ResponseResetPasswordDto
     {

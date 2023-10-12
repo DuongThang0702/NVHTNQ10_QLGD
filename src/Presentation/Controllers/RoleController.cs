@@ -50,8 +50,10 @@ namespace Presentation.Controllers
         public async Task<IActionResult> DeleteRole([FromRoute] string roleId)
         {
             var response = await _roleService.DeleteRole(roleId);
-            if (response.Status == false) return BadRequest(response);
-            else return Ok(response);
+            if (response.Status == false)
+                return BadRequest(response);
+            else
+                return Ok(response);
         }
     }
 }

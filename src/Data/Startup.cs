@@ -1,4 +1,5 @@
-﻿using Data.Repositories.Role;
+﻿using Data.Repositories.Auth;
+using Data.Repositories.Role;
 using Data.Repositories.User;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -10,6 +11,7 @@ namespace Data
         {
             return services
                 .AddScoped<IRoleRepo, RoleRepo>()
+                .AddScoped<IAuthRepo, AuthRepo>()
                 .AddScoped<IUserRepo, UserRepo>();
         }
     }

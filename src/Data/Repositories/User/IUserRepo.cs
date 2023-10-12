@@ -11,7 +11,6 @@ namespace Data.Repositories.User
     public interface IUserRepo
     {
         Task<List<ApplicationUser>> GetAll();
-        Task<IdentityResult> RestPassword(string userId, string newPassword);
-        Task<IdentityResult> CreateUser(string Email, string FullName, string Password);
+        Task<IdentityResult> Delete(string userId);
     }
 }

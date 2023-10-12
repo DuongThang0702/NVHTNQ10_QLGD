@@ -10,7 +10,8 @@ namespace Business.Services.Auth
 {
     public interface IAuthService
     {
-        Task<IdentityResult> SignIn(SignInDto data);
+        Task<IdentityResult> ResetPassword(ResetPasswordDto data);
+        Task<SignInResponseDto> SignIn(SignInDto data);
         Task<IdentityResult> SignUp(SignUpDto data);
     }
 }

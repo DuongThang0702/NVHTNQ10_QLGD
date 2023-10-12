@@ -1,5 +1,6 @@
 ﻿using Business.Dtos;
 using Data.Entities;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,6 @@ namespace Business.Services.User
     public interface IUserService
     {
         Task<ResponseGetUserDto> GetAllUser();
-        Task<ResponseResetPasswordDto> ResetPassword(ResetPasswordDto data, string userID);
+        Task<IdentityResult> DeleteUser(string userID);
     }
 }
