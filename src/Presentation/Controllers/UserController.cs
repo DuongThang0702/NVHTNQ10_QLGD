@@ -26,6 +26,23 @@ namespace Presentation.Controllers
                 return Ok(response);
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetOneUser([FromRoute] string id)
+        {
+            var response = await _userService.GetOneUser(id);
+            if (response == null) return BadRequest("User not found");
+            return Ok(response);
+        }
+
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> UpdateInfoUser([FromBody] UpdateInfoUserDto data, [FromRoute] string id)
+        {
+            var response = await _userService.UpdateUser(id, data);
+            if (!response.Succeeded)
+                return BadRequest(response);
+            else return Ok(response);
+        }
+
         [HttpDelete("{userId}")]
         public async Task<IActionResult> DeleteUser([FromRoute] string userId)
         {

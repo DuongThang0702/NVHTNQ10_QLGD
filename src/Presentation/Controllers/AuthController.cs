@@ -46,5 +46,22 @@ namespace Presentation.Controllers
             else
                 return Ok(response);
         }
+
+
+        [HttpPatch]
+        public async Task<IActionResult> UpdateRole([FromBody] UpdateRoleUser data)
+        {
+            var response = await _authService.UpdateRoleUser(data);
+            if (!response.Succeeded) return BadRequest(response);
+            else return Ok(response);
+        }
+
+        [HttpPatch]
+        public async Task<IActionResult> BlockUser([FromBody] BlockUserDto data)
+        {
+            var response = await _authService.BlockUser(data);
+            if (!response.Succeeded) return BadRequest(response);
+            else return Ok(response);
+        }
     }
 }
