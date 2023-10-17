@@ -13,5 +13,7 @@ namespace Business.Services.Auth
         Task<IdentityResult> ResetPassword(ResetPasswordDto data);
         Task<SignInResponseDto> SignIn(SignInDto data);
         Task<IdentityResult> SignUp(SignUpDto data);
+        Task<IdentityResult> BlockUser(BlockUserDto data);
+        Task<IdentityResult> UpdateRoleUser(UpdateRoleUser data);
     }
 }

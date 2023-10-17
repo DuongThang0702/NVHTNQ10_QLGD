@@ -12,6 +12,8 @@ namespace Business.Services.User
     public interface IUserService
     {
         Task<ResponseGetUserDto> GetAllUser();
+        Task<ApplicationUser> GetOneUser(string userId);
         Task<IdentityResult> DeleteUser(string userID);
+        Task<IdentityResult> UpdateUser(string userId, UpdateInfoUserDto data);
     }
 }

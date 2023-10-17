@@ -20,10 +20,8 @@ namespace Business.Dtos
                 ErrorMessage = "Password must have at least 1 lowercase letter, 1 uppercase letter, 1 number and 1 special character."
             )
         ]
-        public string Password { get; set; } = string.Empty;
 
-        [Required]
-        public string? FullName { get; set; }
+        public string Password { get; set; } = string.Empty;
     }
 
     public class SignInDto
@@ -33,6 +31,17 @@ namespace Business.Dtos
 
         [Required, MinLength(6)]
         public string? Password { get; set; }
+    }
+
+    public class UpdateRoleUser
+    {
+        public string? UserId { get; set; }
+        public string? Role { get; set; }
+    }
+
+    public class BlockUserDto
+    {
+        public string? UserId { get; set; }
     }
 
     public class ResetPasswordDto

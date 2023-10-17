@@ -1,27 +1,12 @@
-﻿using Data.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Business.Dtos
+namespace Data.Model
 {
-    public class ResponseGetUserDto
-    {
-        public bool Status { get; set; }
-        public long TotalUsers { get; set; }
-        public List<ApplicationUser>? Users { get; set; }
-    }
-
-    public class ResponseResetPasswordDto
-    {
-        public bool Status { get; set; }
-        public string Mes { get; set; } = string.Empty;
-    }
-
-    public class UpdateInfoUserDto
+    public class UpdateInfoUser
     {
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;

@@ -1,4 +1,6 @@
 ﻿using Business.Dtos;
+using Data.Entities;
+using Data.Model;
 using Data.Repositories.User;
 using Microsoft.AspNetCore.Identity;
 
@@ -32,6 +34,26 @@ namespace Business.Services.User
                 Status = true
             };
             return result;
+        }
+
+        public async Task<ApplicationUser> GetOneUser(string userId)
+        {
+            var user = await _userRepo.GetOneById(userId)!;
+            return user;
+        }
+
+        public async Task<IdentityResult> UpdateUser(string userId, UpdateInfoUserDto data)
+        {
+            var infofUser = new UpdateInfoUser
+            {
+                Address = data.Address,
+                DateOfBirth = data.DateOfBirth,
+                FirstName = data.FirstName,
+                LastName = data.LastName,
+                ParentName = data.ParentName,
+                PhoneNumber = data.PhoneNumber
+            };
+            return await _userRepo.Update(userId, infofUser);
         }
     }
 }

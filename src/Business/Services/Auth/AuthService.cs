@@ -48,14 +48,13 @@ namespace Business.Services.Auth
         public async Task<IdentityResult> SignUp(SignUpDto data)
         {
             if (
-                string.IsNullOrEmpty(data.FullName)
-                || string.IsNullOrEmpty(data.Email)
+                string.IsNullOrEmpty(data.Email)
                 || string.IsNullOrEmpty(data.Password)
             )
                 return IdentityResult.Failed(
                     new IdentityError { Code = "InvalidData", Description = "Invalid data" }
                 );
-            var response = await _authRepo.SignUp(data.Email, data.FullName, data.Password);
+            var response = await _authRepo.SignUp(data.Email, data.Password);
             return response;
         }
 
@@ -77,6 +76,27 @@ namespace Business.Services.Auth
                 data.NewPassword
             );
             return response;
+        }
+
+        public async Task<IdentityResult> BlockUser(BlockUserDto data)
+        {
+            if (string.IsNullOrEmpty(data.UserId))
+            {
+                IdentityError error = new() { Code = "400", Description = "Missing input" };
+                return IdentityResult.Failed(error);
+            }
+            var result = await _authRepo.BlockUser(data.UserId);
+            return result;
+        }
+
+        public async Task<IdentityResult> UpdateRoleUser(UpdateRoleUser data)
+        {
+            if (string.IsNullOrEmpty(data.UserId) || string.IsNullOrEmpty(data.Role))
+            {
+                IdentityError error = new() { Code = "400", Description = "Missing input" };
+                return IdentityResult.Failed(error);
+            }
+            return await _authRepo.UpdateRoleUser(data.UserId, data.Role);
         }
     }
 }

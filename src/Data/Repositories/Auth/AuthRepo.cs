@@ -10,20 +10,24 @@ using System.Text;
 namespace Data.Repositories.Auth
 {
     public class AuthRepo : IAuthRepo
+
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _config;
 
         public AuthRepo(
             UserManager<ApplicationUser> userManager,
             IConfiguration config,
-            SignInManager<ApplicationUser> signInManager
+            SignInManager<ApplicationUser> signInManager,
+            RoleManager<IdentityRole> roleManager
         )
         {
             _userManager = userManager;
             _config = config;
             _signInManager = signInManager;
+            _roleManager = roleManager;
         }
 
         public async Task<string> SignIn(string Email, string Password)
@@ -31,7 +35,6 @@ namespace Data.Repositories.Auth
             var user = await _userManager.FindByEmailAsync(Email);
             if (user == null)
                 return string.Empty;
-            //var matchingPassword = await _userManager.CheckPasswordAsync(user, Password);
             var matchingPassword = await _signInManager.PasswordSignInAsync(
                 user,
                 Password,
@@ -44,7 +47,6 @@ namespace Data.Repositories.Auth
             var authClaims = new List<Claim>
             {
                 new Claim(ClaimTypes.Email, Email),
-                new Claim(ClaimTypes.Name, user.FullName),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
@@ -65,7 +67,7 @@ namespace Data.Repositories.Auth
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        public async Task<IdentityResult> SignUp(string Email, string FullName, string Password)
+        public async Task<IdentityResult> SignUp(string Email, string Password)
         {
             var existingUser = await _userManager.FindByEmailAsync(Email);
             if (existingUser != null)
@@ -76,7 +78,6 @@ namespace Data.Repositories.Auth
             var user = new ApplicationUser
             {
                 Email = Email,
-                FullName = FullName,
                 UserName = Email
             };
             var result = await _userManager.CreateAsync(user, Password);
@@ -108,6 +109,59 @@ namespace Data.Repositories.Auth
                 newPassword
             );
             return addNewPassword;
+        }
+
+        public async Task<IdentityResult> BlockUser(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                var error = new IdentityError
+                {
+                    Code = "400",
+                    Description = "User not found"
+                };
+                return IdentityResult.Failed(error);
+            }
+            user.IsBlocked = true;
+            return await _userManager.UpdateAsync(user);
+        }
+
+        public async Task<IdentityResult> UpdateRoleUser(string userId, string role)
+        {
+            var matchingRoleName = await _roleManager.RoleExistsAsync(role);
+            if (!matchingRoleName)
+            {
+                var error = new IdentityError
+                {
+                    Code = "400",
+                    Description = "Role not found"
+                };
+                return IdentityResult.Failed(error);
+            }
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user == null)
+            {
+                var error = new IdentityError
+                {
+                    Code = "400",
+                    Description = "User not found"
+                };
+                return IdentityResult.Failed(error);
+            }
+
+            var oldRole = await _userManager.GetRolesAsync(user);
+            if (oldRole == null)
+            {
+                await _userManager.AddToRoleAsync(user, role);
+            }
+            else
+            {
+                await _userManager.RemoveFromRoleAsync(user, oldRole.FirstOrDefault());
+                await _userManager.AddToRoleAsync(user, role);
+            }
+            return await _userManager.UpdateAsync(user);
         }
     }
 }

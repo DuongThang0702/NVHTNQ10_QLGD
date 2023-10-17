@@ -2,6 +2,8 @@
 using Business.Dtos;
 using Business.Services.Auth;
 using Business.Services.Role;
+using Business.Services.Student;
+using Business.Services.Teacher;
 using Business.Services.User;
 using Data;
 using Data.Entities;
@@ -35,11 +37,16 @@ namespace Business
                 CreateMap<DeleteRoleDto, IdentityRole>();
                 CreateMap<ResetPasswordDto, ApplicationUser>();
                 CreateMap<SignInDto, ApplicationUser>();
-                CreateMap<SignUpDto, ApplicationUser>();
+                CreateMap<UpdateInfoUserDto, ApplicationUser>();
+                CreateMap<UpdateRoleUser, ApplicationUser>();
+                CreateMap<BlockUserDto, ApplicationUser>();
+                CreateMap<UpdateInfoUserDto, ApplicationUser>();
+                CreateMap<UpdateInfoTeacherDto, ApplicationUser>();
+                CreateMap<CreateTeacherDto, ApplicationUser>();
             }
         }
     }
-   
+
     public static class ConfigScope
     {
         public static IServiceCollection ConfigurationScoped(this IServiceCollection services)
@@ -47,6 +54,8 @@ namespace Business
             return services
                 .AddScoped<IRoleService, RoleService>()
                 .AddScoped<IUserService, UserService>()
+                .AddScoped<IStudentService, StudentService>()
+                .AddScoped<ITeacherService, TeacherService>()
                 .AddScoped<IAuthService, AuthService>();
         }
     }
